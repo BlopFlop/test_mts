@@ -6,7 +6,7 @@ from company.schemas import (
     StatusSchemaUpdate,
     StatusSchemaDB
 )
-from company.validatiors import validate_object_for_id
+from company.validatiors import validate_object_for_id, check_fields_duplicate
 
 router = APIRouter()
 
@@ -47,6 +47,7 @@ async def create_status(
     status: StatusSchemaCreate,
     status_repo: StatusRepository = Depends(get_status_repo),
 ):
+    await check_fields_duplicate(status, ("name",), status_repo)
     new_project = await status_repo.create(obj_in=status)
     return new_project
 
@@ -77,6 +78,7 @@ async def change_status(
     obj_in: StatusSchemaUpdate,
     status_repo: StatusRepository = Depends(get_status_repo),
 ):
+    check_fields_duplicate(obj_in, ("name",), status_repo)
     await validate_object_for_id(status_id, status_repo)
     status = await status_repo.get(obj_id=status_id)
     return await status_repo.update(status, obj_in)

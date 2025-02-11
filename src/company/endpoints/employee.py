@@ -41,7 +41,7 @@ async def get_employee(
     "/",
     response_model=EmployeeSchemasDB,
     summary="Создает сотрудника.",
-    employee_code=201,
+    status_code=201,
 )
 async def create_employee(
     employee: EmployeeSchemasCreate,
@@ -54,7 +54,7 @@ async def create_employee(
 @router.delete(
     "/{employee_id}/",
     summary="Удалить сотрудника.",
-    employee_code=204,
+    status_code=204,
 )
 async def delete_employee(
     employee_id: int,
@@ -70,7 +70,7 @@ async def delete_employee(
     "/{employee_id}/",
     response_model=EmployeeSchemasDB,
     summary="Изменить сотрудника.",
-    employee_code=201,
+    status_code=201,
 )
 async def change_employee(
     employee_id: int,

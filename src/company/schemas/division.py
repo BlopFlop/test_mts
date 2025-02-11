@@ -1,6 +1,9 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field, PositiveInt
+from fastapi import HTTPException
+from pydantic import (
+    BaseModel, Field, PositiveInt, field_validator, model_validator
+)
 
 
 class DivisionBase(BaseModel):
@@ -23,8 +26,17 @@ class DivisionBase(BaseModel):
         json_schema_extra = {
             "example": {
                 "name": "Отдел контроля строительства",
+                "parent_id": 1,
             }
         }
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, value: str) -> str:
+        if not value.strip():
+            exc_msg = "Значение поля name не должно быть пусты."
+            raise HTTPException(status_code=422, detail=exc_msg)
+        return value
 
 
 class DivisionSchemaCreate(DivisionBase):

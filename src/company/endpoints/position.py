@@ -6,7 +6,7 @@ from company.schemas import (
     PositionSchemaUpdate,
     PositionSchemaDB
 )
-from company.validatiors import validate_object_for_id
+from company.validatiors import validate_object_for_id, check_fields_duplicate
 
 router = APIRouter()
 
@@ -47,8 +47,9 @@ async def create_position(
     position: PositionSchemaCreate,
     position_repo: PositionRepository = Depends(get_position_repo),
 ):
-    new_project = await position_repo.create(obj_in=position)
-    return new_project
+    await check_fields_duplicate(position, ("name",), position_repo)
+    new_position = await position_repo.create(obj_in=position)
+    return new_position
 
 
 @router.delete(
@@ -77,6 +78,7 @@ async def change_position(
     obj_in: PositionSchemaUpdate,
     position_repo: PositionRepository = Depends(get_position_repo),
 ):
+    await check_fields_duplicate(obj_in, ("name",), position_repo)
     await validate_object_for_id(position_id, position_repo)
     position = await position_repo.get(obj_id=position_id)
     return await position_repo.update(position, obj_in)

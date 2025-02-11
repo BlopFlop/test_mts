@@ -1,6 +1,7 @@
+from fastapi import HTTPException
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class PositionBase(BaseModel):
@@ -20,6 +21,14 @@ class PositionBase(BaseModel):
                 "name": "менеджер проекта",
             }
         }
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, value: str) -> str:
+        if not value.strip():
+            exc_msg = "Значение поля name не должно быть пусты."
+            raise HTTPException(status_code=422, detail=exc_msg)
+        return value
 
 
 class PositionSchemaCreate(PositionBase):

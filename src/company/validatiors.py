@@ -42,3 +42,9 @@ async def validate_object_for_id(obj_id: int, repository: RepositoryBase):
         exc_msg = f"Объекта под id {obj_id} не существует в базе данных."
         raise HTTPException(status_code=400, detail=exc_msg)
     return obj_db
+
+
+def check_equal_id_for_parent_id(id: int, parent_id: int) -> None:
+    if id == parent_id:
+        exc_msg = "Id и parent_id не могут быть равными."
+        raise HTTPException(status_code=400, detail=exc_msg)

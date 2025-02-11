@@ -17,7 +17,7 @@ class _SettingsBase(BaseSettings):
 class SettingsApp(_SettingsBase):
     """Settings FastApi application."""
 
-    name_app: str = Field(alias="APP_NAME_PROJECT")
+    name_app: str = Field(alias="NAME_APP")
 
 
 class SettingsDatabase(_SettingsBase):

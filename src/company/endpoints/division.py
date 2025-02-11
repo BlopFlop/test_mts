@@ -6,7 +6,7 @@ from company.schemas import (
     DivisionSchemaUpdate,
     DivisionSchemaDB
 )
-from company.validatiors import validate_object_for_id
+from company.validatiors import validate_object_for_id, check_fields_duplicate, check_equal_id_for_parent_id
 
 router = APIRouter()
 
@@ -41,12 +41,15 @@ async def get_division(
     "/",
     response_model=DivisionSchemaDB,
     summary="Создает сотрудника.",
-    division_code=201,
+    status_code=201,
 )
 async def create_division(
     division: DivisionSchemaCreate,
     division_repo: DivisionRepository = Depends(get_division_repo),
 ):
+    await check_fields_duplicate(division, ("name",), division_repo)
+    if division.parent_id:
+        await validate_object_for_id(division.parent_id, division_repo)
     new_project = await division_repo.create(obj_in=division)
     return new_project
 
@@ -54,7 +57,7 @@ async def create_division(
 @router.delete(
     "/{division_id}/",
     summary="Удалить сотрудника.",
-    division_code=204,
+    status_code=204,
 )
 async def delete_division(
     division_id: int,
@@ -70,7 +73,7 @@ async def delete_division(
     "/{division_id}/",
     response_model=DivisionSchemaDB,
     summary="Изменить сотрудника.",
-    division_code=201,
+    status_code=201,
 )
 async def change_division(
     division_id: int,
@@ -78,5 +81,9 @@ async def change_division(
     division_repo: DivisionRepository = Depends(get_division_repo),
 ):
     await validate_object_for_id(division_id, division_repo)
+    await check_fields_duplicate(obj_in, ("name",), division_repo)
     division = await division_repo.get(obj_id=division_id)
+    if obj_in.parent_id:
+        await validate_object_for_id(obj_in.parent_id, division_repo)
+    check_equal_id_for_parent_id(division_id, obj_in.parent_id)
     return await division_repo.update(division, obj_in)
