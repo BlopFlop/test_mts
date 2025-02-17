@@ -7,10 +7,10 @@ from repository import RepositoryBase
 
 
 class StatusRepository(RepositoryBase):
-    """/."""
+    """Status repo."""
 
 
 async def get_status_repo(
-    session: AsyncSession = Depends(get_async_session)
+    session: AsyncSession = Depends(get_async_session),
 ) -> StatusRepository:
     return StatusRepository(Status, session)

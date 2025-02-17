@@ -9,10 +9,10 @@ from repository import RepositoryBase
 
 
 class DivisionRepository(RepositoryBase):
-    """/."""
+    """Division repostiory."""
 
 
 async def get_division_repo(
-    session: AsyncSession = Depends(get_async_session)
+    session: AsyncSession = Depends(get_async_session),
 ) -> RepositoryBase:
     return DivisionRepository(Division, session)

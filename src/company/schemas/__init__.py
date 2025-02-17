@@ -1,22 +1,22 @@
 from company.schemas.division import (
     DivisionSchemaCreate,
     DivisionSchemaUpdate,
-    DivisionSchemaDB
+    DivisionSchemaDB,
 )
 from company.schemas.employee import (
     EmployeeSchemasCreate,
     EmployeeSchemasUpdate,
-    EmployeeSchemasDB
+    EmployeeSchemaDB,
 )
 from company.schemas.position import (
     PositionSchemaCreate,
     PositionSchemaUpdate,
-    PositionSchemaDB
+    PositionSchemaDB,
 )
 from company.schemas.status import (
     StatusSchemaCreate,
     StatusSchemaUpdate,
-    StatusSchemaDB
+    StatusSchemaDB,
 )
 
 __all__ = [
@@ -25,11 +25,11 @@ __all__ = [
     "DivisionSchemaDB",
     "EmployeeSchemasCreate",
     "EmployeeSchemasUpdate",
-    "EmployeeSchemasDB",
+    "EmployeeSchemaDB",
     "PositionSchemaCreate",
     "PositionSchemaUpdate",
     "PositionSchemaDB",
     "StatusSchemaCreate",
     "StatusSchemaUpdate",
-    "StatusSchemaDB"
+    "StatusSchemaDB",
 ]

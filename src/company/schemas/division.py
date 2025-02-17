@@ -2,22 +2,21 @@ from typing import Optional
 
 from fastapi import HTTPException
 from pydantic import (
-    BaseModel, Field, PositiveInt, field_validator, model_validator
+    BaseModel,
+    Field,
+    PositiveInt,
+    field_validator,
+    model_validator,
 )
 
 
 class DivisionBase(BaseModel):
 
     name: str = Field(
-        min_length=1,
-        max_length=150,
-        title="Name",
-        description="Имя отдела"
+        min_length=1, max_length=150, title="Name", description="Имя отдела"
     )
     parent_id: Optional[PositiveInt] = Field(
-        None,
-        title="Parent id",
-        description="Родительский отдел."
+        None, title="Parent id", description="Родительский отдел."
     )
 
     class Config:
@@ -45,17 +44,13 @@ class DivisionSchemaCreate(DivisionBase):
 
 class DivisionSchemaUpdate(DivisionBase):
     name: Optional[str] = Field(
-        min_length=1,
-        max_length=150,
-        title="Name",
-        description="Имя отдела"
+        min_length=1, max_length=150, title="Name", description="Имя отдела"
     )
 
 
 class DivisionSchemaDB(DivisionBase):
     id: int = Field(
-        title="Id Division in DB",
-        description="Id Отдела в базе данных"
+        title="Id Division in DB", description="Id Отдела в базе данных"
     )
 
     class Config:

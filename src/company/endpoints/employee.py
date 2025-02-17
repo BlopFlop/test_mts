@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends
 
+import logging
+
 from company.repository import EmployeeRepository, get_employee_repo
 from company.schemas import (
+    EmployeeSchemaDB,
     EmployeeSchemasCreate,
     EmployeeSchemasUpdate,
-    EmployeeSchemasDB
 )
 from company.validatiors import validate_object_for_id
 
@@ -13,19 +15,20 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=list[EmployeeSchemasDB],
+    response_model=list[EmployeeSchemaDB],
     summary="Получить всех сотрудников",
     description="Получает сотрудников из базы данных.",
 )
 async def get_all_employee(
     employee_repo: EmployeeRepository = Depends(get_employee_repo),
 ):
-    return await employee_repo.get_multi()
+    objs = await employee_repo.get_multi()
+    return objs
 
 
 @router.get(
     "/{employee_id}/",
-    response_model=EmployeeSchemasDB,
+    response_model=EmployeeSchemaDB,
     summary="Получить сотрудника по id",
     description="Получает сотрудника по id из базы данных.",
 )
@@ -39,7 +42,7 @@ async def get_employee(
 
 @router.post(
     "/",
-    response_model=EmployeeSchemasDB,
+    response_model=EmployeeSchemaDB,
     summary="Создает сотрудника.",
     status_code=201,
 )
@@ -68,7 +71,7 @@ async def delete_employee(
 
 @router.patch(
     "/{employee_id}/",
-    response_model=EmployeeSchemasDB,
+    response_model=EmployeeSchemaDB,
     summary="Изменить сотрудника.",
     status_code=201,
 )

@@ -1,16 +1,13 @@
-from fastapi import HTTPException
 from typing import Optional
 
+from fastapi import HTTPException
 from pydantic import BaseModel, Field, field_validator
 
 
 class PositionBase(BaseModel):
 
     name: str = Field(
-        min_length=1,
-        max_length=150,
-        title="Name",
-        description="Имя должности"
+        min_length=1, max_length=150, title="Name", description="Имя должности"
     )
 
     class Config:
@@ -37,17 +34,13 @@ class PositionSchemaCreate(PositionBase):
 
 class PositionSchemaUpdate(PositionBase):
     name: Optional[str] = Field(
-        min_length=1,
-        max_length=150,
-        title="Name",
-        description="Имя отдела"
+        min_length=1, max_length=150, title="Name", description="Имя отдела"
     )
 
 
 class PositionSchemaDB(PositionBase):
     id: int = Field(
-        title="Id Position in DB",
-        description="Id Отдела в базе данных"
+        title="Id Position in DB", description="Id Отдела в базе данных"
     )
 
     class Config:

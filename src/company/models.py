@@ -1,14 +1,14 @@
 from datetime import date
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
-    UniqueConstraint,
+    Date,
     ForeignKey,
     Integer,
     String,
-    Date,
-    Boolean,
-    text
+    UniqueConstraint,
+    text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -26,7 +26,6 @@ class Employee(Base):
     )
     first_name: Mapped[str] = mapped_column(
         String(150),
-        unique=True,
         nullable=False,
         comment=(
             "Имя сотрудника, обязательное строковое поле;"
@@ -35,7 +34,6 @@ class Employee(Base):
     )
     last_name: Mapped[str] = mapped_column(
         String(150),
-        unique=True,
         nullable=False,
         comment=(
             "Фамилия сотрудника, обязательное строковое поле;"
@@ -44,7 +42,6 @@ class Employee(Base):
     )
     middle_name: Mapped[str] = mapped_column(
         String(150),
-        unique=True,
         nullable=False,
         comment=(
             "Отчество сотрудника, обязательное строковое поле;"
@@ -59,9 +56,7 @@ class Employee(Base):
         comment="Дата устройства сотрудника.",
     )
     termination_date: Mapped[date] = mapped_column(
-        Date,
-        nullable=True,
-        comment="Дата увольнения сотрудника."
+        Date, nullable=True, comment="Дата увольнения сотрудника."
     )
 
     is_staff: Mapped[bool] = mapped_column(
@@ -79,9 +74,7 @@ class Employee(Base):
         CheckConstraint("0 < salary", name="check_positive_salary"),
         default=0,
         nullable=False,
-        comment=(
-            "Зарплата сотрудника, позитивное целочисленное значение."
-        )
+        comment=("Зарплата сотрудника, позитивное целочисленное значение."),
     )
 
     __table_args__ = (
@@ -95,51 +88,39 @@ class Employee(Base):
         CheckConstraint(
             "LENGTH(middle_name) > 0", name="check_not_null_middle_name"
         ),
-        UniqueConstraint("id", "manager_id", name="employee_uniq_pk_to_fk")
+        UniqueConstraint("id", "manager_id", name="employee_uniq_pk_to_fk"),
     )
 
     # relation fields
     manager_id: Mapped[int | None] = mapped_column(
         ForeignKey("employee.id"),
         CheckConstraint("id != manager_id", name="not_equal_id_or_manager_id"),
-        nullable=True
+        nullable=True,
     )
     manager: Mapped["Employee"] = relationship(
-        "Employee",
-        back_populates="subordinates",
-        remote_side=[id]
+        "Employee", back_populates="subordinates", remote_side=[id]
     )
     subordinates: Mapped[list["Employee"]] = relationship(
-        "Employee",
-        back_populates="manager",
-        remote_side=[manager_id]
+        "Employee", back_populates="manager", remote_side=[manager_id]
     )
 
     division_id: Mapped[int | None] = mapped_column(
-        Integer,
-        ForeignKey("division.id"),
-        nullable=True
+        Integer, ForeignKey("division.id"), nullable=True
     )
     division: Mapped["Division"] = relationship(back_populates="employees")
 
     position_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("position.id"),
-        nullable=False
+        Integer, ForeignKey("position.id"), nullable=False
     )
     position: Mapped["Position"] = relationship(
-        back_populates="employees",
-        cascade="all, delete"
+        back_populates="employees", cascade="all, delete"
     )
 
     status_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("status.id"),
-        nullable=False
+        Integer, ForeignKey("status.id"), nullable=False
     )
     status: Mapped["Status"] = relationship(
-        back_populates="employees",
-        cascade="all, delete"
+        back_populates="employees", cascade="all, delete"
     )
 
     def __repr__(self) -> str:
@@ -159,7 +140,7 @@ class BaseModel(Base):
         comment=(
             "Уникальное имя, обязательное строковое поле;"
             " Допустимая длина строки от 1 до 150 символов влкючительно."
-        )
+        ),
     )
 
     def __repr__(self) -> str:
@@ -174,10 +155,9 @@ class Division(BaseModel):
 
     __table_args__ = (
         CheckConstraint(
-            "LENGTH(name) > 0",
-            name='check_not_null_division_name'
+            "LENGTH(name) > 0", name="check_not_null_division_name"
         ),
-        UniqueConstraint("id", "parent_id", name="division_uniq_pk_to_fk")
+        UniqueConstraint("id", "parent_id", name="division_uniq_pk_to_fk"),
     )
 
     id: Mapped[int] = mapped_column(
@@ -188,16 +168,12 @@ class Division(BaseModel):
     )
 
     # relation fields
-    parent_id: Mapped[int | None] = mapped_column(
-        ForeignKey("division.id")
-    )
+    parent_id: Mapped[int | None] = mapped_column(ForeignKey("division.id"))
     parent: Mapped["Division"] = relationship(
-        back_populates="child",
-        remote_side=[id]
+        back_populates="child", remote_side=[id]
     )
     child: Mapped[list["Division"]] = relationship(
-        back_populates="parent",
-        remote_side=[parent_id]
+        back_populates="parent", remote_side=[parent_id]
     )
 
     employees: Mapped[list[Employee]] = relationship(back_populates="division")
@@ -208,8 +184,7 @@ class Position(BaseModel):
 
     __table_args__ = (
         CheckConstraint(
-            "LENGTH(name) > 0",
-            name='check_not_null_position_name'
+            "LENGTH(name) > 0", name="check_not_null_position_name"
         ),
     )
 
@@ -220,10 +195,7 @@ class Status(BaseModel):
     """Status model."""
 
     __table_args__ = (
-        CheckConstraint(
-            "LENGTH(name) > 0",
-            name='check_not_null_status_name'
-        ),
+        CheckConstraint("LENGTH(name) > 0", name="check_not_null_status_name"),
     )
 
     employees: Mapped[list[Employee]] = relationship(back_populates="status")

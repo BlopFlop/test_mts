@@ -11,9 +11,7 @@ from database import get_async_session
 class RepositoryBase:
     """Base CRUD operations in current application."""
 
-    def __init__(
-        self, model, session: AsyncSession
-    ):
+    def __init__(self, model, session: AsyncSession):
         self.model = model
         self.session = session
 

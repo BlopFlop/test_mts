@@ -7,5 +7,5 @@ __all__ = [
     "division_router",
     "employee_router",
     "position_router",
-    "status_router"
+    "status_router",
 ]

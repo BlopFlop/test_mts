@@ -10,7 +10,7 @@ class StatusBase(BaseModel):
         min_length=1,
         max_length=150,
         title="Name",
-        description="Наименование статуса сотрудника."
+        description="Наименование статуса сотрудника.",
     )
 
     class Config:
@@ -37,17 +37,13 @@ class StatusSchemaCreate(StatusBase):
 
 class StatusSchemaUpdate(StatusBase):
     name: Optional[str] = Field(
-        min_length=1,
-        max_length=150,
-        title="Name",
-        description="Имя отдела"
+        min_length=1, max_length=150, title="Name", description="Имя отдела"
     )
 
 
 class StatusSchemaDB(StatusBase):
     id: int = Field(
-        title="Id Status in DB",
-        description="Id статуса в базе данных"
+        title="Id Status in DB", description="Id статуса в базе данных"
     )
 
     class Config:

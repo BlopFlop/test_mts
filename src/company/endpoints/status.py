@@ -3,10 +3,10 @@ from fastapi import APIRouter, Depends
 from company.repository import StatusRepository, get_status_repo
 from company.schemas import (
     StatusSchemaCreate,
+    StatusSchemaDB,
     StatusSchemaUpdate,
-    StatusSchemaDB
 )
-from company.validatiors import validate_object_for_id, check_fields_duplicate
+from company.validatiors import check_fields_duplicate, validate_object_for_id
 
 router = APIRouter()
 
