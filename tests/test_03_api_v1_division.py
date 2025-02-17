@@ -4,25 +4,24 @@ import pytest
 from fastapi import Response
 from fastapi.testclient import TestClient
 
-# from src.company.models import Division
-
 from tests.fixtures.division import (
+    child_department,
     correct_data_1,
     correct_data_2,
     correct_data_3,
     correct_data_4,
     correct_data_5,
     correct_data_6,
-
     incorrect_data_1,
     incorrect_data_2,
     incorrect_data_3,
     incorrect_data_4,
     incorrect_data_5,
     incorrect_data_6,
-
-    child_department
 )
+
+# from src.company.models import Division
+
 
 DIVISION_URL = "/api/v1/company/division/"
 
@@ -36,14 +35,12 @@ DIVISION_URL = "/api/v1/company/division/"
         (correct_data_4, 201),
         (correct_data_5, 201),
         (correct_data_6, 201),
-
         (correct_data_1, 400),
         (correct_data_2, 400),
         (correct_data_3, 400),
         (correct_data_4, 400),
         (correct_data_5, 400),
         (correct_data_6, 400),
-
         (incorrect_data_1, 422),
         (incorrect_data_2, 422),
         (incorrect_data_3, 422),
@@ -87,9 +84,7 @@ def test_create_division_incorrect_id(
     )
 
 
-def test_create_division_for_parent(
-    test_client: TestClient, division
-):
+def test_create_division_for_parent(test_client: TestClient, division):
     child_department["parent_id"] = division.id
     response: Response = test_client.post(DIVISION_URL, json=child_department)
     assert response.status_code == 201, (
@@ -106,8 +101,7 @@ def test_create_division_for_parent(
         f": `{'`, `'.join(missing_keys)}`"
     )
     assert data == child_department, (
-        "При создании Position тело ответа"
-        " API отличается от ожидаемого."
+        "При создании Position тело ответа" " API отличается от ожидаемого."
     )
 
 
@@ -168,9 +162,7 @@ def test_get_invalid_id(test_client: TestClient, id_: int):
     )
 
 
-def test_update_division(
-    test_client: TestClient, division
-):
+def test_update_division(test_client: TestClient, division):
     response: Response = test_client.get(DIVISION_URL)
 
     data_division = response.json()
@@ -182,7 +174,7 @@ def test_update_division(
         url = DIVISION_URL + f"{id_}/"
         update_data = {
             "name": "new" + data_div.get("name")[3:],
-            "parent_id": division.id
+            "parent_id": division.id,
         }
         response: Response = test_client.patch(url, json=update_data)
         assert response.status_code == 201, (
@@ -228,7 +220,7 @@ def test_update_division_id_equal_and_parent_id(
         url = DIVISION_URL + f"{id_}/"
         update_data = {
             "name": "wew" + division.get("name")[3:],
-            "parent_id": id_
+            "parent_id": id_,
         }
         response: Response = test_client.patch(url, json=update_data)
         assert response.status_code == 400, (
@@ -249,7 +241,7 @@ def test_update_division_incorrect_id(
         url = DIVISION_URL + f"{id_}/"
         update_data = {
             "name": "wew" + division.get("name")[3:],
-            "parent_id": 50020
+            "parent_id": 50020,
         }
         response: Response = test_client.patch(url, json=update_data)
         assert response.status_code == 400, (

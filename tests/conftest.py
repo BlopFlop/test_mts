@@ -1,32 +1,32 @@
-from typing import Callable
 from pathlib import Path
-import pytest
+from typing import Callable
 
+import pytest
 import pytest_asyncio
+from fastapi.testclient import TestClient
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from pydantic import BaseModel
-from fastapi.testclient import TestClient
 from sqlalchemy.pool import NullPool
 
-from src.config import test_database_config
-from src.database import Base, get_async_session
-from src.main import app
-from src.company.schemas import (
-    DivisionSchemaCreate,
-    EmployeeSchemasCreate,
-    PositionSchemaCreate,
-    StatusSchemaCreate
-)
 from src.company.repository import (
     get_division_repo,
     get_employee_repo,
     get_position_repo,
-    get_status_repo
+    get_status_repo,
 )
+from src.company.schemas import (
+    DivisionSchemaCreate,
+    EmployeeSchemasCreate,
+    PositionSchemaCreate,
+    StatusSchemaCreate,
+)
+from src.config import test_database_config
+from src.database import Base, get_async_session
+from src.main import app
 
 engine_test = create_async_engine(
     test_database_config.database_url, poolclass=NullPool
@@ -66,7 +66,7 @@ async def create_mock_elt(
     session: AsyncSession,
     search_field: str,
     create_schema: BaseModel,
-    repo_func: Callable
+    repo_func: Callable,
 ):
     repo = await repo_func(session)
     data = await repo.get_obj_for_field_arg(

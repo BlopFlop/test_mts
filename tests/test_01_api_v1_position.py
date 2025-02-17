@@ -10,12 +10,11 @@ from tests.fixtures.position import (
     correct_data_3,
     correct_data_4,
     correct_data_5,
-
     incorrect_data_1,
     incorrect_data_2,
     incorrect_data_3,
     incorrect_data_4,
-    incorrect_data_5
+    incorrect_data_5,
 )
 
 POSITION_URL = "/api/v1/company/position/"

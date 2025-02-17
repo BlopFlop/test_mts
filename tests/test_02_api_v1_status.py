@@ -10,12 +10,11 @@ from tests.fixtures.status import (
     correct_data_3,
     correct_data_4,
     correct_data_5,
-
     incorrect_data_1,
     incorrect_data_2,
     incorrect_data_3,
     incorrect_data_4,
-    incorrect_data_5
+    incorrect_data_5,
 )
 
 STATUS_URL = "/api/v1/company/status/"
@@ -59,8 +58,7 @@ def test_create_status(
             f": `{'`, `'.join(missing_keys)}`"
         )
         assert data == data_status, (
-            "При создании Status тело ответа"
-            " API отличается от ожидаемого."
+            "При создании Status тело ответа" " API отличается от ожидаемого."
         )
 
 
@@ -172,8 +170,7 @@ def test_update_status(
             f": `{'`, `'.join(missing_keys)}`"
         )
         assert data == update_data, (
-            "При изменении status тело ответа"
-            " API отличается от ожидаемого."
+            "При изменении status тело ответа" " API отличается от ожидаемого."
         )
 
 
